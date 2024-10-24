@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f8f8;
+        }
+
+        .calculator {
+            width: 300px; /* Adjust the overall calculator width */
+            padding: 10px; /* Reduce padding */
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .display {
+            height: 50px; /* Reduce display height */
+            font-size: 1.5rem; /* Adjust font size */
+            line-height: 50px; /* Make text vertically centered */
+            padding: 0 10px; /* Reduce padding */
+            margin-bottom: 20px;
+            color: black;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            text-align: right;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+        }
+
+        button {
+            font-size: 1.25rem; /* Adjust button font size */
+            padding: 15px; /* Adjust padding for a smaller look */
+            border: none;
+            border-radius: 8px;
+            background-color: #e0e0e0;
+            color: black;
+            cursor: pointer;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-color: #d4d4d4;
+        }
+
+        .orange {
+            background-color: #ff9500;
+            color: white;
+        }
+
+        .orange:hover {
+            background-color: #e58e00;
+        }
+
+        .wide {
+            grid-column: span 2;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <!-- Display Area -->
+        <div class="display" id="display">0</div>
+        <!-- Calculator Buttons -->
+        <div class="buttons">
+            <button onclick="clearDisplay()" class="orange">AC</button>
+            <button onclick="deleteLast()">⌫</button>
+            <button onclick="appendOperator('%')">%</button>
+            <button onclick="appendOperator('/')">÷</button>
+            <button onclick="appendNumber(7)">7</button>
+            <button onclick="appendNumber(8)">8</button>
+            <button onclick="appendNumber(9)">9</button>
+            <button onclick="appendOperator('*')">×</button>
+            <button onclick="appendNumber(4)">4</button>
+            <button onclick="appendNumber(5)">5</button>
+            <button onclick="appendNumber(6)">6</button>
+            <button onclick="appendOperator('-')">−</button>
+            <button onclick="appendNumber(1)">1</button>
+            <button onclick="appendNumber(2)">2</button>
+            <button onclick="appendNumber(3)">3</button>
+            <button onclick="appendOperator('+')">+</button>
+            <button onclick="appendNumber(0)" class="wide">0</button>
+            <button onclick="appendOperator('.')">.</button>
+            <button onclick="calculate()" class="orange">=</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentInput = '0';
+        let operator = '';
+        let previousInput = '';
+
+        // Append number to the display
+        function appendNumber(number) {
+            if (currentInput === '0') {
+                currentInput = number.toString();
+            } else {
+                currentInput += number.toString();
+            }
+            updateDisplay();
+        }
+
+        // Append operator to the display
+        function appendOperator(op) {
+            if (currentInput !== '') {
+                operator = op;
+                previousInput = currentInput;
+                currentInput = '';
+            }
+        }
+        // Update the display with the current input
+        function updateDisplay() {
+            display.innerText = currentInput;
+        }
+
+        // Clear the display
+        function clearDisplay() {
+            currentInput = '0';
+            operator = '';
+            previousInput = '';
+            updateDisplay();
+        }
+
+        // Delete the last character
+        function deleteLast() {
+            currentInput = currentInput.slice(0, -1);
+            if (currentInput === '') {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+
+        // Perform the calculation
+        function calculate() {
+            if (previousInput !== '' && currentInput !== '' && operator !== '') {
+                let result = 0;
+                let prev = parseFloat(previousInput);
+                let curr = parseFloat(currentInput);
+
+                switch (operator) {
+                    case '+':
+                        result = prev + curr;
+                        break;
+                    case '-':
+                        result = prev - curr;
+                        break;
+                    case '*':
+                        result = prev * curr;
+                        break;
+                    case '/':
+                        result = prev / curr;
+                        break;
+                    case '%':
+                        result = prev % curr;
+                        break;
+                }
+
+                currentInput = result.toString();
+                operator = '';
+                previousInput = '';
+                updateDisplay();
+            }
+        }
+    </script>
+
+</body>
+</html>
